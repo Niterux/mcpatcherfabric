@@ -74,7 +74,7 @@ public class CompassSpriteMixin {
 	@ModifyConstant(method = "tick()V",
 		slice = @Slice(from = @At(value = "INVOKE", target = "Ljava/lang/Math;cos(D)D")),
 		constant = {@Constant(intValue = 16, ordinal = 0), @Constant(intValue = 16, ordinal = 2)})
-	private int fixPositioning(int eightPointFive) {
+	private int fixPositioning(int sixteen) {
 		return TileSize.int_size;
 	}
 
