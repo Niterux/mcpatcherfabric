@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.github.niterux.mcpatcherfabric.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "accessors.FoliageColorsColorAccessor",
+    "accessors.GrassColorsColorAccessor",
+    "accessors.WaterColorsColorAccessor",
+    "hdtextures.TextRendererMixin",
+    "hdtextures.TexturePacksMixin",
+    "hdfont.HDFontMixin",
+    "hdtextures.TextRendererMixinCursed"
+  ],
+  "plugin": "io.github.niterux.mcpatcherfabric.mixinplugins.ExampleMixinConfigPlugin",
+  "injectors": {
+    "defaultRequire": 1
+	}
+}

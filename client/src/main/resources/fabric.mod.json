@@ -1,0 +1,25 @@
+{
+	"schemaVersion": 1,
+	"id": "mcpatcherfabric",
+	"version": "${version}",
+	"name": "MCPatcherFabric",
+	"description": "A port of MCPatcher's mods to Fabric.",
+	"authors": [
+		"Paul Rupe",
+    "Niterux",
+    "LlamaLad7"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "MIT",
+	"environment": "client",
+	"mixins": [
+		"mcpatcherfabric.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.3",
+		"minecraft": "1.0.0-beta.7.3"
+	}
+}
