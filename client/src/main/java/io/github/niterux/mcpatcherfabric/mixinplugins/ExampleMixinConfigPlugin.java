@@ -20,59 +20,59 @@ import java.util.Set;
 
 //Programmed by LlamaLad7
 public class ExampleMixinConfigPlugin implements IMixinConfigPlugin {
-    @Override
-    public void onLoad(String mixinPackage) {
-    }
+	@Override
+	public void onLoad(String mixinPackage) {
+	}
 
-    @Override
-    public String getRefMapperConfig() {
-        return null;
-    }
+	@Override
+	public String getRefMapperConfig() {
+		return null;
+	}
 
-    @Override
-    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return true;
-    }
+	@Override
+	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+		return true;
+	}
 
-    @Override
-    public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
-    }
+	@Override
+	public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
+	}
 
-    @Override
-    public List<String> getMixins() {
-        return null;
-    }
+	@Override
+	public List<String> getMixins() {
+		return null;
+	}
 
-    @Override
-    public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-    }
+	@Override
+	public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
+	}
 
-    @Override
-    public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-        if (Annotations.getInvisible(targetClass, ReInitializable.class) == null) {
-            return;
-        }
-        for (FieldNode field : targetClass.fields) {
-            if ((field.access & Opcodes.ACC_STATIC) == 0) {
-                field.access &= ~Opcodes.ACC_FINAL;
-            }
-        }
+	@Override
+	public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
+		if (Annotations.getInvisible(targetClass, ReInitializable.class) == null) {
+			return;
+		}
+		for (FieldNode field : targetClass.fields) {
+			if ((field.access & Opcodes.ACC_STATIC) == 0) {
+				field.access &= ~Opcodes.ACC_FINAL;
+			}
+		}
 		Map<String, MethodNode> ctors = new HashMap<>();
-        for (MethodNode method : targetClass.methods) {
-            if (method.name.equals("<init>")) {
-                ctors.put(method.desc, method);
-            }
-        }
-        for (MethodNode method : targetClass.methods) {
-            if (Annotations.getInvisible(method, ReInitializer.class) != null) {
+		for (MethodNode method : targetClass.methods) {
+			if (method.name.equals("<init>")) {
+				ctors.put(method.desc, method);
+			}
+		}
+		for (MethodNode method : targetClass.methods) {
+			if (Annotations.getInvisible(method, ReInitializer.class) != null) {
 				MethodNode ctor = ctors.get(method.desc);
-                if (ctor == null) {
-                    throw new IllegalStateException("Could not find matching ctor for " + method);
-                }
-                copyCtor(targetClass, ctor, method);
-            }
-        }
-    }
+				if (ctor == null) {
+					throw new IllegalStateException("Could not find matching ctor for " + method);
+				}
+				copyCtor(targetClass, ctor, method);
+			}
+		}
+	}
 
 	//fixed by wagyourtail
 	private void copyCtor(ClassNode owner, MethodNode ctor, MethodNode target) {
@@ -111,12 +111,12 @@ public class ExampleMixinConfigPlugin implements IMixinConfigPlugin {
 		target.instructions.remove(initialiser.insn);
 	}
 
-    private InsnList popInitializerArgs(String desc) {
+	private InsnList popInitializerArgs(String desc) {
 		InsnList result = new InsnList();
-        result.add(new InsnNode(Opcodes.POP)); // The object itself
-        for (Type type : Type.getArgumentTypes(desc)) {
-            result.insert(new InsnNode(type.getSize() == 2 ? Opcodes.POP2 : Opcodes.POP));
-        }
-        return result;
-    }
+		result.add(new InsnNode(Opcodes.POP)); // The object itself
+		for (Type type : Type.getArgumentTypes(desc)) {
+			result.insert(new InsnNode(type.getSize() == 2 ? Opcodes.POP2 : Opcodes.POP));
+		}
+		return result;
+	}
 }

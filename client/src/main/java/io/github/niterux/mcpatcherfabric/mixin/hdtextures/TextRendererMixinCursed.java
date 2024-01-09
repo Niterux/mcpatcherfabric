@@ -6,7 +6,6 @@ import io.github.niterux.mcpatcherfabric.mixinplugins.ReInitializer;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.render.texture.TextureManager;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 
 @ReInitializable

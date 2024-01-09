@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(WaterColors.class)
 public interface WaterColorsColorAccessor {
 	@Accessor("colors")
-	public static int[] getColors() {
+    static int[] getColors() {
 		throw new AssertionError();
 	}
 }
