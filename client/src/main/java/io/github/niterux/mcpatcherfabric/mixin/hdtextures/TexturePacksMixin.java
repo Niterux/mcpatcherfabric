@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.pclewis.mcpatcher.mod.TextureUtils;
-@Debug(export = true)
 @Mixin(TexturePacks.class)
 public class TexturePacksMixin {
 	@Shadow
@@ -21,6 +20,6 @@ public class TexturePacksMixin {
 		TextureUtils.setTileSize();
 		Minecraft minecraft = this.minecraft;
 		((setTileInterface)this.minecraft.textureManager).setTileSize(minecraft);
-		TextureUtils.setFontRenderer();
+		TextureUtils.setFontRenderer(this.minecraft);
 	}
 }

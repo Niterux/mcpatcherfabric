@@ -7,6 +7,8 @@ import io.github.niterux.mcpatcherfabric.mixin.accessors.FoliageColorsColorAcces
 import io.github.niterux.mcpatcherfabric.mixin.accessors.GrassColorsColorAccessor;
 import io.github.niterux.mcpatcherfabric.mixin.accessors.WaterColorsColorAccessor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.render.texture.*;
 import net.minecraft.client.resource.pack.BuiltInTexturePack;
 import net.minecraft.client.resource.pack.TexturePack;
@@ -17,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,9 +88,9 @@ public class TextureUtils {
         }
     }
 
-    public static void setFontRenderer() {
+    public static void setFontRenderer(Minecraft minecraft) {
         MCPatcherUtils.log("setFontRenderer()");
-		//((reInitializeInterface)minecraft.textRenderer).mcpatcherfabric$reInitialize(minecraft.options, "/font/default.png", minecraft.textureManager);
+		reInitializeTextRenderer(minecraft.options, "/font/default.png", minecraft.textureManager);
 
     }
 
@@ -200,7 +203,7 @@ public class TextureUtils {
         }
 
         for (TextureAtlasSprite t : textureList) {
-            //t.tick();
+            t.tick();
         }
 
         if (WaterColorsColorAccessor.getColors() != FoliageColorsColorAccessor.getColors()) {
@@ -367,6 +370,20 @@ public class TextureUtils {
             e.printStackTrace();
         }
     }
+
+	public static void reInitializeTextRenderer(GameOptions options, String fontPath, TextureManager textureManager) {
+		TextRenderer newRenderer = new TextRenderer(options, fontPath, textureManager);
+		int oldTex = TextureUtils.minecraft.textRenderer.boundTexture;
+		for (Field declaredField : TextRenderer.class.getDeclaredFields()) {
+			declaredField.setAccessible(true);
+			try {
+				declaredField.set(TextureUtils.minecraft.textRenderer, declaredField.get(newRenderer));
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		TextureUtils.minecraft.textureManager.remove(oldTex);
+	}
 
     public static void setMinecraft(Minecraft minecraft) {
         TextureUtils.minecraft = minecraft;

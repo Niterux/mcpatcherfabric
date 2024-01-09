@@ -13,21 +13,20 @@ import com.pclewis.mcpatcher.mod.TileSize;
 import java.nio.ByteBuffer;
 import java.util.List;
 
-@Debug(export = true)
 @Mixin(TextureManager.class)
 public abstract class TextureManagerMixin implements setTileInterface {
 	@Shadow
-	ByteBuffer buffer;
+	private ByteBuffer buffer;
 
 	@Shadow
 	public abstract void reload();
 
 	@Shadow
-	List sprites;
+	private List sprites;
 
 	@Override
 	public void setTileSize(Minecraft minecraft) {
-		this.buffer = MemoryTracker.createByteBuffer((int)TileSize.int_glBufferSize);
+		this.buffer = MemoryTracker.createByteBuffer(TileSize.int_glBufferSize);
 		this.reload();
 		TextureUtils.refreshTextureFX(this.sprites);
 	}

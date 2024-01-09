@@ -13,10 +13,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
-@Debug(export = true)
 @Mixin(TextRenderer.class)
 public class TextRendererMixin {
-	@Redirect(method = "Lnet/minecraft/client/render/TextRenderer;<init>(Lnet/minecraft/client/options/GameOptions;Ljava/lang/String;Lnet/minecraft/client/render/texture/TextureManager;)V",
+	@Redirect(method = "<init>(Lnet/minecraft/client/options/GameOptions;Ljava/lang/String;Lnet/minecraft/client/render/texture/TextureManager;)V",
 		at = @At(value = "INVOKE", target = "Ljavax/imageio/ImageIO;read(Ljava/io/InputStream;)Ljava/awt/image/BufferedImage;"))
 	private BufferedImage testMixin(InputStream variable, GameOptions options, String fontPath) throws IOException {
 		System.out.println(variable);

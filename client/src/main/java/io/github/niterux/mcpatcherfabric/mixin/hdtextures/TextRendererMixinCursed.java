@@ -9,7 +9,6 @@ import net.minecraft.client.render.texture.TextureManager;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Debug(export = true)
 @ReInitializable
 @Mixin(value = TextRenderer.class, priority = 9999)
 public abstract class TextRendererMixinCursed implements reInitializeInterface {
