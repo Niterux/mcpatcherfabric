@@ -6,10 +6,10 @@
 	"description": "A port of MCPatcher's mods to Fabric.",
 	"authors": [
 		"Paul Rupe",
-    "Niterux",
-    "LlamaLad7"
+    "Niterux"
 	],
-	"contact": {
+  "contributors": ["LlamaLad7"],
+  "contact": {
 		"homepage": "",
 		"sources": ""
 	},

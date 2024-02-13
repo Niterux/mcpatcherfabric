@@ -98,3 +98,12 @@ def configure(project) {
 		}
 	}
 }
+configure(project)
+
+loom {
+	clientOnlyMinecraftJar()
+}
+
+ploceus {
+	clientOnlyMappings()
+}

@@ -1,7 +1,7 @@
 package io.github.niterux.mcpatcherfabric.mixin.hdtextures;
 
 import com.pclewis.mcpatcher.mod.TextureUtils;
-import io.github.niterux.mcpatcherfabric.hdtextures.setTileInterface;
+import io.github.niterux.mcpatcherfabric.hdtextures.ResizeTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resource.pack.TexturePack;
 import net.minecraft.client.resource.pack.TexturePacks;
@@ -17,10 +17,9 @@ public class TexturePacksMixin {
 	private Minecraft minecraft;
 
 	@Inject(method = "select(Lnet/minecraft/client/resource/pack/TexturePack;)Z", at = @At(value = "TAIL"))
-	private void testMixin(TexturePack par1, CallbackInfoReturnable<Boolean> cir) {
+	private void setTextureSize(TexturePack par1, CallbackInfoReturnable<Boolean> cir) {
 		TextureUtils.setTileSize();
-		Minecraft minecraft = this.minecraft;
-		((setTileInterface) this.minecraft.textureManager).setTileSize(minecraft);
+		((ResizeTile) this.minecraft.textureManager).mcpatcherfabric$setTileSize(this.minecraft);
 		TextureUtils.setFontRenderer(this.minecraft);
 	}
 }

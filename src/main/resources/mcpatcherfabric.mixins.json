@@ -12,6 +12,15 @@
     "hdtextures.TextureManagerMixin",
     "hdtextures.TextRendererMixin",
     "hdtextures.TexturePacksMixin",
+    "hdtextures.TextureAtlasSpriteMixin",
+    "hdtextures.HeldItemRendererMixin",
+    "hdtextures.LiquidSpriteMixin",
+    "hdtextures.NetherPortalSpriteMixin",
+    "hdtextures.LiquidSideSpriteMixin",
+    "hdtextures.ClockSpriteMixin",
+    "hdtextures.FireSpriteMixin",
+    "bettergrass.GrassBlockMixin",
+    "bettergrass.BlockRendererMixin",
     "hdfont.HDFontMixin"
   ],
   "injectors": {

@@ -1,8 +1,10 @@
 package io.github.niterux.mcpatcherfabric.mixin.hdtextures;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.pclewis.mcpatcher.mod.TextureUtils;
 import com.pclewis.mcpatcher.mod.TileSize;
 import net.minecraft.client.render.texture.CompassSprite;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
@@ -15,12 +17,7 @@ import java.net.URL;
 @Mixin(CompassSprite.class)
 public class CompassSpriteMixin {
 	@Shadow
-	private int[] image;
-
-	@Inject(method = "<init>(Lnet/minecraft/client/Minecraft;)V", at = @At(value = "TAIL"))
-	private void fieldFix(CallbackInfo info) {
-		image = new int[TileSize.int_numPixels];
-	}
+	private int[] image = new int[TileSize.int_numPixels];
 
 	@Redirect(method = "<init>(Lnet/minecraft/client/Minecraft;)V",
 		at = @At(value = "INVOKE", target = "Ljavax/imageio/ImageIO;read(Ljava/net/URL;)Ljava/awt/image/BufferedImage;"))
@@ -28,66 +25,66 @@ public class CompassSpriteMixin {
 		return TextureUtils.getResourceAsBufferedImage("/gui/items.png");
 	}
 
-	@ModifyConstant(method = "<init>(Lnet/minecraft/client/Minecraft;)V",
-		constant = {@Constant(intValue = 16, ordinal = 1),
-			@Constant(intValue = 16, ordinal = 3),
-			@Constant(intValue = 16, ordinal = 4),
-			@Constant(intValue = 16, ordinal = 5),
-			@Constant(intValue = 16, ordinal = 6)})
+	@ModifyExpressionValue(method = "<init>(Lnet/minecraft/client/Minecraft;)V",
+		at = {@At(value = "CONSTANT", ordinal = 1, args = "intValue=16"),
+			@At(value = "CONSTANT", ordinal = 3, args = "intValue=16"),
+			@At(value = "CONSTANT", ordinal = 4, args = "intValue=16"),
+			@At(value = "CONSTANT", ordinal = 5, args = "intValue=16"),
+			@At(value = "CONSTANT", ordinal = 6, args = "intValue=16")})
 	private int fixSpriteSize(int sixteen) {
 		return TileSize.int_size;
 	}
 
-	@ModifyConstant(method = "tick()V", constant = @Constant(intValue = 256))
+	@ModifyExpressionValue(method = "tick()V", at = @At(value = "CONSTANT", ordinal = 0, args = "intValue=256"))
 	private int fixLoopLength(int twoFiftySix) {
 		return TileSize.int_numPixels;
 	}
 
-	@ModifyConstant(method = "tick()V",
+	@ModifyExpressionValue(method = "tick()V",
 		slice = @Slice(from = @At(value = "INVOKE", target = "Ljava/lang/Math;cos(D)D")),
-		constant = @Constant(intValue = -4, ordinal = 0))
+		at = @At(value = "CONSTANT", ordinal = 0, args = "intValue=-4"))
 	private int fixCompassCrossMin(int negativeFour) {
 		return TileSize.int_compassCrossMin;
 	}
 
-	@ModifyConstant(method = "tick()V",
+	@ModifyExpressionValue(method = "tick()V",
 		slice = @Slice(from = @At(value = "INVOKE", target = "Ljava/lang/Math;cos(D)D")),
-		constant = @Constant(intValue = 4, ordinal = 0))
+		at = @At(value = "CONSTANT", ordinal = 0, args = "intValue=4"))
 	private int fixCompassCrossMax(int four) {
 		return TileSize.int_compassCrossMax;
 	}
 
-	@ModifyConstant(method = "tick()V",
+	@ModifyExpressionValue(method = "tick()V",
 		slice = @Slice(from = @At(value = "INVOKE", target = "Ljava/lang/Math;cos(D)D")),
-		constant = @Constant(doubleValue = 7.5))
+		at = @At(value = "CONSTANT", args = "doubleValue=7.5"))
 	private double fixCompassCenterMin(double sevenPointFive) {
 		return TileSize.double_compassCenterMin;
 	}
 
-	@ModifyConstant(method = "tick()V",
+	@ModifyExpressionValue(method = "tick()V",
 		slice = @Slice(from = @At(value = "INVOKE", target = "Ljava/lang/Math;cos(D)D")),
-		constant = @Constant(doubleValue = 8.5))
+		at = @At(value = "CONSTANT", args = "doubleValue=8.5"))
 	private double fixCompassCenterMax(double eightPointFive) {
 		return TileSize.double_compassCenterMax;
 	}
 
-	@ModifyConstant(method = "tick()V",
+	@ModifyExpressionValue(method = "tick()V",
 		slice = @Slice(from = @At(value = "INVOKE", target = "Ljava/lang/Math;cos(D)D")),
-		constant = {@Constant(intValue = 16, ordinal = 0), @Constant(intValue = 16, ordinal = 2)})
+		at = {@At(value = "CONSTANT", ordinal = 0, args = "intValue=16"), @At(value = "CONSTANT", ordinal = 2, args = "intValue=16")})
 	private int fixPositioning(int sixteen) {
 		return TileSize.int_size;
 	}
 
-	@ModifyConstant(method = "tick()V",
+	@ModifyExpressionValue(method = "tick()V",
 		slice = @Slice(from = @At(value = "INVOKE", target = "Ljava/lang/Math;cos(D)D")),
-		constant = @Constant(intValue = 16, ordinal = 1))
+		at = @At(value = "CONSTANT", ordinal = 1, args = "intValue=16"))
 	private int fixLoopLength_2(int sixteen) {
 		return TileSize.int_compassNeedleMax;
 	}
 
-	@ModifyConstant(method = "tick()V",
+	@ModifyExpressionValue(method = "tick()V",
 		slice = @Slice(from = @At(value = "INVOKE", target = "Ljava/lang/Math;cos(D)D")),
-		constant = @Constant(intValue = -8, ordinal = 0))
+		at = @At(value = "CONSTANT", ordinal = 0, args = "intValue=-8"))
 	private int fixLoopStart(int negativeEight) {
 		return TileSize.int_compassNeedleMin;
 	}
