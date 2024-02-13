@@ -1,7 +1,6 @@
 package io.github.niterux.mcpatcherfabric.mixin.bettergrass;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -40,11 +39,10 @@ public class BlockRendererMixin {
 		}
 	}
 
-	@WrapOperation(method = "tessellateWithoutAmbientOcclusion(Lnet/minecraft/block/Block;IIIFFF)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getSprite(Lnet/minecraft/world/WorldView;IIII)I"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getSprite(Lnet/minecraft/world/WorldView;IIII)I", ordinal = 2)))
-	private int enableGrassColoringNonAO(Block instance, WorldView world, int x, int y, int z, int face, Operation<Integer> original, @Local(ordinal = 0) BufferBuilder bufferBuilderLocalRef, @Local(ordinal = 20) float lightLevel, @Local(ordinal = 7) float red, @Local(ordinal = 8) float green, @Local(ordinal = 9) float blue) {
-		int sprite = original.call(instance, world, x, y, z, face);
+	@ModifyExpressionValue(method = "tessellateWithoutAmbientOcclusion(Lnet/minecraft/block/Block;IIIFFF)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getSprite(Lnet/minecraft/world/WorldView;IIII)I"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getSprite(Lnet/minecraft/world/WorldView;IIII)I", ordinal = 2)))
+	private int enableGrassColoringNonAO(int sprite, @Local(ordinal = 0) BufferBuilder bufferBuilder, @Local(ordinal = 20) float lightLevel, @Local(ordinal = 7) float red, @Local(ordinal = 8) float green, @Local(ordinal = 9) float blue) {
 		if (sprite == 0)
-			bufferBuilderLocalRef.color(red * lightLevel, green * lightLevel, blue * lightLevel);
+			bufferBuilder.color(red * lightLevel, green * lightLevel, blue * lightLevel);
 		return sprite;
 	}
 }

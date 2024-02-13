@@ -3,7 +3,6 @@ package io.github.niterux.mcpatcherfabric.mixin.hdtextures;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.pclewis.mcpatcher.mod.TileSize;
 import net.minecraft.client.render.HeldItemRenderer;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Slice;

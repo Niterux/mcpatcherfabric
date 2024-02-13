@@ -7,7 +7,6 @@ import io.github.niterux.mcpatcherfabric.hdtextures.ResizeTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.texture.TextureAtlasSprite;
 import net.minecraft.client.render.texture.TextureManager;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

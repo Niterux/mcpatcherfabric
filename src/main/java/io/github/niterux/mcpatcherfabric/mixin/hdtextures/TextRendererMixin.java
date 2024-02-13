@@ -1,6 +1,5 @@
 package io.github.niterux.mcpatcherfabric.mixin.hdtextures;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import com.pclewis.mcpatcher.mod.TextureUtils;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.TextRenderer;
