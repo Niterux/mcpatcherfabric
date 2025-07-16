@@ -11,7 +11,7 @@ import com.pclewis.mcpatcher.mod.TextureUtils;
 import com.pclewis.mcpatcher.mod.TileSize;
 import io.github.niterux.mcpatcherfabric.hdtextures.ResizeTile;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.texture.TextureAtlasSprite;
+import net.minecraft.client.render.texture.TextureAtlas;
 import net.minecraft.client.render.texture.TextureManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -91,19 +91,19 @@ public abstract class TextureManagerMixin implements ResizeTile {
 	}
 
 	@Inject(method = "tick()V", at = @At(value = "INVOKE", target = "java/nio/ByteBuffer.clear ()Ljava/nio/Buffer;", shift = At.Shift.AFTER, ordinal = 0))
-	private void resizeTextureBufferTick(CallbackInfo ci, @Local(ordinal = 0) TextureAtlasSprite textureAtlasSprite) {
-		if (this.buffer.capacity() != textureAtlasSprite.buffer.length)
-			this.buffer = MemoryTracker.createByteBuffer(textureAtlasSprite.buffer.length);
+	private void resizeTextureBufferTick(CallbackInfo ci, @Local(ordinal = 0) TextureAtlas textureAtlas) {
+		if (this.buffer.capacity() != textureAtlas.buffer.length)
+			this.buffer = MemoryTracker.createByteBuffer(textureAtlas.buffer.length);
 	}
 
-	@WrapOperation(method = "addSprite(Lnet/minecraft/client/render/texture/TextureAtlasSprite;)V", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z"))
+	@WrapOperation(method = "addSprite(Lnet/minecraft/client/render/texture/TextureAtlas;)V", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z"))
 	private boolean mcpatcherRegisterSprite(List instance, Object sprite, Operation<Boolean> original) {
-		TextureUtils.registerTextureFX(instance, (TextureAtlasSprite) sprite);
+		TextureUtils.registerTextureFX(instance, (TextureAtlas) sprite);
 		return true;
 	}
 
-	@WrapOperation(method = "addSprite(Lnet/minecraft/client/render/texture/TextureAtlasSprite;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/texture/TextureAtlasSprite;tick()V"))
-	private void mcpatcherRemoveSpriteTick(TextureAtlasSprite instance, Operation<Void> original) {
+	@WrapOperation(method = "addSprite(Lnet/minecraft/client/render/texture/TextureAtlas;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/texture/TextureAtlas;tick()V"))
+	private void mcpatcherRemoveSpriteTick(TextureAtlas instance, Operation<Void> original) {
 	}
 
 	@ModifyExpressionValue(method = "tick()V", at = {@At(value = "CONSTANT", args = "intValue=16", ordinal = 1), @At(value = "CONSTANT", args = "intValue=16", ordinal = 2), @At(value = "CONSTANT", args = "intValue=16", ordinal = 4), @At(value = "CONSTANT", args = "intValue=16", ordinal = 5), @At(value = "CONSTANT", args = "intValue=16", ordinal = 6), @At(value = "CONSTANT", args = "intValue=16", ordinal = 7), @At(value = "CONSTANT", args = "intValue=16", ordinal = 12), @At(value = "CONSTANT", args = "intValue=16", ordinal = 13)})

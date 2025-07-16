@@ -19,10 +19,13 @@
   "license": "MIT",
   "environment": "client",
   "mixins": [
-    "mcpatcherfabric.mixins.json"
+    "mcpatcherfabric-default.mixins.json",
+    "mcpatcherfabric-bettergrass.mixins.json",
+    "mcpatcherfabric-hdfont.mixins.json",
+    "mcpatcherfabric-hdtextures.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.15.3",
+    "fabricloader": ">=0.16.14",
     "minecraft": "1.0.0-beta.7.3"
   }
 }

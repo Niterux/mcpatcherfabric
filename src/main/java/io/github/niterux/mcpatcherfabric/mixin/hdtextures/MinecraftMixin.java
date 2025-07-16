@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.pclewis.mcpatcher.mod.TextureUtils;
 import io.github.niterux.mcpatcherfabric.hdtextures.ResizeTile;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.texture.TextureAtlasSprite;
+import net.minecraft.client.render.texture.TextureAtlas;
 import net.minecraft.client.render.texture.TextureManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,7 +29,7 @@ public class MinecraftMixin {
 		((ResizeTile) this.textureManager).mcpatcherfabric$setTileSize((Minecraft) (Object) this);
 	}
 
-	@WrapOperation(method = "init()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/texture/TextureManager;addSprite(Lnet/minecraft/client/render/texture/TextureAtlasSprite;)V"))
-	private void cancelAddSprite(TextureManager instance, TextureAtlasSprite textureAtlasSprite, Operation<Void> original) {
+	@WrapOperation(method = "init()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/texture/TextureManager;addSprite(Lnet/minecraft/client/render/texture/TextureAtlas;)V"))
+	private void cancelAddSprite(TextureManager instance, TextureAtlas textureAtlas, Operation<Void> original) {
 	}
 }

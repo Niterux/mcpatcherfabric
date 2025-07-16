@@ -51,16 +51,16 @@ public class TextureUtils {
 	private static final HashMap<String, BufferedImage> cache = new HashMap<String, BufferedImage>();
 
 	static {
-		animatedFire = MCPatcherUtils.getBoolean(MCPatcherUtils.HD_TEXTURES, "animatedFire", true);
-		animatedLava = MCPatcherUtils.getBoolean(MCPatcherUtils.HD_TEXTURES, "animatedLava", true);
-		animatedWater = MCPatcherUtils.getBoolean(MCPatcherUtils.HD_TEXTURES, "animatedWater", true);
-		animatedPortal = MCPatcherUtils.getBoolean(MCPatcherUtils.HD_TEXTURES, "animatedPortal", true);
-		customFire = MCPatcherUtils.getBoolean(MCPatcherUtils.HD_TEXTURES, "customFire", true);
-		customLava = MCPatcherUtils.getBoolean(MCPatcherUtils.HD_TEXTURES, "customLava", true);
-		customWater = MCPatcherUtils.getBoolean(MCPatcherUtils.HD_TEXTURES, "customWater", true);
-		customPortal = MCPatcherUtils.getBoolean(MCPatcherUtils.HD_TEXTURES, "customPortal", true);
+		animatedFire = MCPatcherUtils.getBoolean(MCPatcherUtils.MODS.get("hdtextures"), "animatedFire", true);
+		animatedLava = MCPatcherUtils.getBoolean(MCPatcherUtils.MODS.get("hdtextures"), "animatedLava", true);
+		animatedWater = MCPatcherUtils.getBoolean(MCPatcherUtils.MODS.get("hdtextures"), "animatedWater", true);
+		animatedPortal = MCPatcherUtils.getBoolean(MCPatcherUtils.MODS.get("hdtextures"), "animatedPortal", true);
+		customFire = MCPatcherUtils.getBoolean(MCPatcherUtils.MODS.get("hdtextures"), "customFire", true);
+		customLava = MCPatcherUtils.getBoolean(MCPatcherUtils.MODS.get("hdtextures"), "customLava", true);
+		customWater = MCPatcherUtils.getBoolean(MCPatcherUtils.MODS.get("hdtextures"), "customWater", true);
+		customPortal = MCPatcherUtils.getBoolean(MCPatcherUtils.MODS.get("hdtextures"), "customPortal", true);
 
-		useTextureCache = MCPatcherUtils.getBoolean(MCPatcherUtils.HD_TEXTURES, "useTextureCache", false);
+		useTextureCache = MCPatcherUtils.getBoolean(MCPatcherUtils.MODS.get("hdtextures"), "useTextureCache", false);
 
 		expectedColumns.put("/terrain.png", 16);
 		expectedColumns.put("/gui/items.png", 16);
@@ -93,8 +93,8 @@ public class TextureUtils {
 
 	}
 
-	public static void registerTextureFX(java.util.List<TextureAtlasSprite> textureList, TextureAtlasSprite textureFX) {
-		TextureAtlasSprite fx = refreshTextureFX(textureFX);
+	public static void registerTextureFX(java.util.List<TextureAtlas> textureList, TextureAtlas textureFX) {
+		TextureAtlas fx = refreshTextureFX(textureFX);
 		if (fx != null) {
 			MCPatcherUtils.log("registering new TextureFX class %s", textureFX.getClass().getName());
 			textureList.add(fx);
@@ -102,7 +102,7 @@ public class TextureUtils {
 		}
 	}
 
-	private static TextureAtlasSprite refreshTextureFX(TextureAtlasSprite textureFX) {
+	private static TextureAtlas refreshTextureFX(TextureAtlas textureFX) {
 		if (textureFX instanceof CompassSprite ||
 			textureFX instanceof ClockSprite ||
 			textureFX instanceof LavaSprite ||
@@ -114,9 +114,9 @@ public class TextureUtils {
 			textureFX instanceof CustomAnimation) {
 			return null;
 		}
-		Class<? extends TextureAtlasSprite> textureFXClass = textureFX.getClass();
+		Class<? extends TextureAtlas> textureFXClass = textureFX.getClass();
 		for (int i = 0; i < 3; i++) {
-			Constructor<? extends TextureAtlasSprite> constructor;
+			Constructor<? extends TextureAtlas> constructor;
 			try {
 				switch (i) {
 					case 0:
@@ -148,12 +148,12 @@ public class TextureUtils {
 		return textureFX;
 	}
 
-	public static void refreshTextureFX(java.util.List<TextureAtlasSprite> textureList) {
+	public static void refreshTextureFX(java.util.List<TextureAtlas> textureList) {
 		MCPatcherUtils.log("refreshTextureFX()");
 
-		ArrayList<TextureAtlasSprite> savedTextureFX = new ArrayList<TextureAtlasSprite>();
-		for (TextureAtlasSprite t : textureList) {
-			TextureAtlasSprite fx = refreshTextureFX(t);
+		ArrayList<TextureAtlas> savedTextureFX = new ArrayList<TextureAtlas>();
+		for (TextureAtlas t : textureList) {
+			TextureAtlas fx = refreshTextureFX(t);
 			if (fx != null) {
 				savedTextureFX.add(fx);
 			}
@@ -196,11 +196,11 @@ public class TextureUtils {
 			textureList.add(new NetherPortalSprite());
 		}
 
-		for (TextureAtlasSprite t : savedTextureFX) {
+		for (TextureAtlas t : savedTextureFX) {
 			textureList.add(t);
 		}
 
-		for (TextureAtlasSprite t : textureList) {
+		for (TextureAtlas t : textureList) {
 			t.tick();
 		}
 

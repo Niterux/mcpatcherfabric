@@ -1,8 +1,8 @@
 plugins {
 	id 'java'
 	id 'maven-publish'
-	id 'fabric-loom' version '1.5-SNAPSHOT' apply false
-	id 'ploceus' version '1.5-SNAPSHOT' apply false
+	id 'fabric-loom' version '1.10-SNAPSHOT' apply false
+	id 'ploceus' version '1.10-SNAPSHOT' apply false
 }
 
 def configure(project) {
@@ -17,6 +17,24 @@ def configure(project) {
 	project.version = "${project.rootProject.version}"
 	project.maven_group = project.rootProject.maven_group
 
+	project.loom {
+		if (project.environment == 'client') {
+			clientOnlyMinecraftJar()
+		}
+		if (project.environment == 'server') {
+			serverOnlyMinecraftJar()
+		}
+	}
+
+	project.ploceus {
+		if (project.environment == 'client') {
+			clientOnlyMappings()
+		}
+		if (project.environment == 'server') {
+			serverOnlyMappings()
+		}
+	}
+
 	project.repositories {
 		// Add repositories to retrieve artifacts from in here.
 		// You should only use this when depending on other mods because
@@ -27,15 +45,12 @@ def configure(project) {
 
 	project.dependencies {
 		minecraft "com.mojang:minecraft:${project.rootProject.minecraft_version}"
-		mappings project.loom.layered {
-			mappings "net.ornithemc:feather:${project.rootProject.minecraft_version}-${project.environment}+build.${project.feather_build}:v2"
-			addLayer project.ploceus.nestedMappings() // remove this line if not using nests
-		}
-		nests "net.ornithemc:nests:${project.rootProject.minecraft_version}-${project.environment}+build.${project.nests_build}" // remove this line if not using nests
+		mappings project.ploceus.featherMappings(project.feather_build)
+		exceptions project.ploceus.raven(project.raven_build) // remove this line if not using exceptions patches
+		signatures project.ploceus.sparrow(project.sparrow_build) // remove this line if not using generics patches
+		nests project.ploceus.nests(project.nests_build) // remove this line if not using inner class patches
 
 		modImplementation "net.fabricmc:fabric-loader:${project.rootProject.loader_version}"
-
-		project.ploceus.addCommonLibraries();
 	}
 
 	project.sourceSets {
@@ -99,11 +114,3 @@ def configure(project) {
 	}
 }
 configure(project)
-
-loom {
-	clientOnlyMinecraftJar()
-}
-
-ploceus {
-	clientOnlyMappings()
-}

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.github.niterux.mcpatcherfabric.mixin.bettergrass",
+  "compatibilityLevel": "JAVA_8",
+  "plugin": "io.github.niterux.mcpatcherfabric.mixin.plugin.MCPatcherMixinConfigPlugin",
+  "client": [
+    "GrassBlockMixin",
+    "BlockRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}

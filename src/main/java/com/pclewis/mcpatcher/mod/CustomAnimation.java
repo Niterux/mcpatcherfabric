@@ -1,14 +1,14 @@
 package com.pclewis.mcpatcher.mod;
 
 import com.pclewis.mcpatcher.MCPatcherUtils;
-import net.minecraft.client.render.texture.TextureAtlasSprite;
+import net.minecraft.client.render.texture.TextureAtlas;
 
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
 
-public class CustomAnimation extends TextureAtlasSprite {
+public class CustomAnimation extends TextureAtlas {
 	private int frame;
 	private int numFrames;
 	private byte[] src;
@@ -20,11 +20,11 @@ public class CustomAnimation extends TextureAtlasSprite {
 
 	static private Random rand = new Random();
 
-	public CustomAnimation(int sprite, int atlas, int resolution, String name, int minScrollDelay, int maxScrollDelay) {
+	public CustomAnimation(int sprite, int type, int resolution, String name, int minScrollDelay, int maxScrollDelay) {
 		super(sprite);
 
 		this.sprite = sprite;
-		this.atlas = atlas;
+		this.type = type;
 		this.resolution = resolution;
 		this.minScrollDelay = minScrollDelay;
 		this.maxScrollDelay = maxScrollDelay;

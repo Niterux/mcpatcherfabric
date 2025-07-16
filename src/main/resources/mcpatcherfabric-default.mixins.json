@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.github.niterux.mcpatcherfabric.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "accessors.FoliageColorsColorAccessor",
+    "accessors.GrassColorsColorAccessor",
+    "accessors.WaterColorsColorAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}

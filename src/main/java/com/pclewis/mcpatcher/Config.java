@@ -13,6 +13,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 class Config {
 	private File xmlFile = null;
@@ -121,7 +122,7 @@ class Config {
 			} else if (tag.startsWith("HDTexture.")) {
 				tag = tag.substring(10);
 				if (!tag.equals("enabled")) {
-					MCPatcherUtils.set(MCPatcherUtils.HD_TEXTURES, tag, value);
+					MCPatcherUtils.set(MCPatcherUtils.MODS.get("hdtextures"), tag, value);
 				}
 			}
 		}
@@ -291,6 +292,10 @@ class Config {
 		return getText(getModConfig(mod, tag));
 	}
 
+	Boolean getModEnabled(String mod) {
+		return Boolean.parseBoolean(getText(getElement(getMod(mod), "enabled")));
+	}
+
 	void setModConfigValue(String mod, String tag, String value) {
 		Element element = getModConfig(mod, tag);
 		if (element != null) {
@@ -306,9 +311,9 @@ class Config {
 			getRoot();
 			getConfig();
 			getMods();
-			setText(getMod(MCPatcherUtils.HD_TEXTURES), TAG_ENABLED, "true");
-			setText(getMod(MCPatcherUtils.HD_FONT), TAG_ENABLED, "true");
-			setText(getMod(MCPatcherUtils.BETTER_GRASS), TAG_ENABLED, "true");
+			setText(getMod(MCPatcherUtils.MODS.get("hdtextures")), TAG_ENABLED, "true");
+			setText(getMod(MCPatcherUtils.MODS.get("hdfont")), TAG_ENABLED, "true");
+			setText(getMod(MCPatcherUtils.MODS.get("bettergrass")), TAG_ENABLED, "true");
 		}
 	}
 

@@ -3,7 +3,10 @@ package com.pclewis.mcpatcher;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.zip.ZipFile;
+
+import net.fabricmc.loader.api.FabricLoader;
 
 /**
  * Collection of static methods available to mods at runtime.  This class is always injected into
@@ -14,15 +17,15 @@ public class MCPatcherUtils {
 	private static boolean debug = false;
 	private static boolean isGame;
 	static Config config = null;
-
-	public static final String HD_TEXTURES = "HD Textures";
-	public static final String HD_FONT = "HD Font";
-	public static final String BETTER_GRASS = "Better Grass";
+	public static final HashMap<String, String> MODS = new HashMap<>();
 
 	private MCPatcherUtils() {
 	}
 
 	static {
+		MODS.put("hdtextures", "HD Textures");
+		MODS.put("hdfont", "HD Font");
+		MODS.put("bettergrass", "Better Grass");
 		isGame = true;
 		try {
 			if (Class.forName("com.pclewis.mcpatcher.MCPatcher") != null) {
@@ -34,7 +37,7 @@ public class MCPatcherUtils {
 		}
 
 		if (isGame) {
-			if (setGameDir(new File(".")) || setGameDir(getDefaultGameDir())) {
+			if (setGameDir(getDefaultGameDir())) {
 				System.out.println("MCPatcherUtils initialized. Directory " + minecraftDir.getPath());
 			} else {
 				System.out.println("MCPatcherUtils initialized. Current directory " + new File(".").getAbsolutePath());
@@ -43,24 +46,12 @@ public class MCPatcherUtils {
 	}
 
 	static File getDefaultGameDir() {
-		String os = System.getProperty("os.name").toLowerCase();
-		String baseDir = null;
-		String subDir = ".minecraft";
-		if (os.contains("win")) {
-			baseDir = System.getenv("APPDATA");
-		} else if (os.contains("mac")) {
-			subDir = "Library/Application Support/minecraft";
-		}
-		if (baseDir == null) {
-			baseDir = System.getProperty("user.home");
-		}
-		return new File(baseDir, subDir);
+		return FabricLoader.getInstance().getGameDir().toFile();
 	}
 
 	static boolean setGameDir(File dir) {
 		if (dir != null &&
 			dir.isDirectory() &&
-			new File(dir, "bin/lwjgl.jar").exists() &&
 			new File(dir, "resources").isDirectory()) {
 			minecraftDir = dir.getAbsoluteFile();
 		} else {
@@ -139,6 +130,12 @@ public class MCPatcherUtils {
 		System.out.printf("ERROR: " + format + "\n", params);
 	}
 
+	public static boolean getModEnabled(String mod) {
+		if (config == null) {
+			return true;
+		}
+		return config.getModEnabled(mod);
+	}
 	/**
 	 * Gets a value from mcpatcher.xml.
 	 *
