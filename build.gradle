@@ -18,21 +18,11 @@ def configure(project) {
 	project.maven_group = project.rootProject.maven_group
 
 	project.loom {
-		if (project.environment == 'client') {
-			clientOnlyMinecraftJar()
-		}
-		if (project.environment == 'server') {
-			serverOnlyMinecraftJar()
-		}
+		clientOnlyMinecraftJar()
 	}
 
 	project.ploceus {
-		if (project.environment == 'client') {
-			clientOnlyMappings()
-		}
-		if (project.environment == 'server') {
-			serverOnlyMappings()
-		}
+		clientOnlyMappings()
 	}
 
 	project.repositories {
@@ -56,10 +46,10 @@ def configure(project) {
 	project.sourceSets {
 		client {
 			java {
-				srcDirs += project.rootProject.sourceSets.main.java.srcDirs
+				srcDirs += project.rootProject.sourceSets.client.java.srcDirs
 			}
 			resources {
-				srcDirs += project.rootProject.sourceSets.main.resources.srcDirs
+				srcDirs += project.rootProject.sourceSets.client.resources.srcDirs
 			}
 		}
 	}
