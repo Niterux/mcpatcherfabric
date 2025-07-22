@@ -1,48 +1,41 @@
 package com.pclewis.mcpatcher;
 
+import net.fabricmc.loader.api.FabricLoader;
+
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipFile;
-
-import net.fabricmc.loader.api.FabricLoader;
 
 /**
  * Collection of static methods available to mods at runtime.  This class is always injected into
  * the output minecraft jar.
  */
 public class MCPatcherUtils {
+	public static final HashMap<String, String> MODS = new HashMap<>();
+	static Config config = null;
 	private static File minecraftDir = null;
 	private static boolean debug = false;
-	private static boolean isGame;
-	static Config config = null;
-	public static final HashMap<String, String> MODS = new HashMap<>();
-
-	private MCPatcherUtils() {
-	}
+	public static final Logger LOGGER = Logger.getLogger("MCPatcher");
 
 	static {
+		LOGGER.setLevel(debug ? Level.FINE : Level.INFO);
 		MODS.put("hdtextures", "HD Textures");
 		MODS.put("hdfont", "HD Font");
 		MODS.put("bettergrass", "Better Grass");
-		isGame = true;
-		try {
-			if (Class.forName("com.pclewis.mcpatcher.MCPatcher") != null) {
-				isGame = false;
-			}
-		} catch (ClassNotFoundException e) {
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
 
-		if (isGame) {
-			if (setGameDir(getDefaultGameDir())) {
-				System.out.println("MCPatcherUtils initialized. Directory " + minecraftDir.getPath());
-			} else {
-				System.out.println("MCPatcherUtils initialized. Current directory " + new File(".").getAbsolutePath());
-			}
+		if (setGameDir(getDefaultGameDir())) {
+			LOGGER.info("MCPatcherUtils initialized. Directory " + minecraftDir.getPath());
+		} else {
+			LOGGER.info("MCPatcherUtils initialized. Current directory " + new File(".").getAbsolutePath());
 		}
+	}
+
+	private MCPatcherUtils() {
 	}
 
 	static File getDefaultGameDir() {
@@ -89,25 +82,23 @@ public class MCPatcherUtils {
 	}
 
 	/**
-	 * Write a debug message to minecraft standard output.
-	 *
-	 * @param format printf-style format string
-	 * @param params printf-style parameters
-	 */
-	public static void log(String format, Object... params) {
-		if (debug) {
-			System.out.printf(format + "\n", params);
-		}
-	}
-
-	/**
 	 * Returns true if running inside game, false if running inside MCPatcher.  Useful for
 	 * code shared between mods and runtime classes.
 	 *
 	 * @return true if in game
 	 */
 	public static boolean isGame() {
-		return isGame;
+		return true;
+	}
+
+	/**
+	 * Write a debug message to minecraft standard output.
+	 *
+	 * @param format printf-style format string
+	 * @param params printf-style parameters
+	 */
+	public static void log(String format, Object... params) {
+		LOGGER.fine(MessageFormat.format(format, params));
 	}
 
 	/**
@@ -117,7 +108,7 @@ public class MCPatcherUtils {
 	 * @param params printf-style parameters
 	 */
 	public static void warn(String format, Object... params) {
-		System.out.printf("WARNING: " + format + "\n", params);
+		LOGGER.warning(MessageFormat.format(format, params));
 	}
 
 	/**
@@ -127,7 +118,7 @@ public class MCPatcherUtils {
 	 * @param params printf-style parameters
 	 */
 	public static void error(String format, Object... params) {
-		System.out.printf("ERROR: " + format + "\n", params);
+		LOGGER.severe(MessageFormat.format(format, params));
 	}
 
 	public static boolean getModEnabled(String mod) {
@@ -136,6 +127,7 @@ public class MCPatcherUtils {
 		}
 		return config.getModEnabled(mod);
 	}
+
 	/**
 	 * Gets a value from mcpatcher.xml.
 	 *

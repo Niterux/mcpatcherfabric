@@ -16,7 +16,7 @@ public class CustomAnimation extends TextureAtlas {
 	private int minScrollDelay = -1;
 	private int maxScrollDelay = -1;
 	private int timer = -1;
-	private boolean isScrolling;
+	private final boolean isScrolling;
 
 	static private Random rand = new Random();
 
@@ -34,7 +34,7 @@ public class CustomAnimation extends TextureAtlas {
 		String customSrc = "custom_" + name + ".png";
 		try {
 			custom = TextureUtils.getResourceAsBufferedImage("/" + customSrc);
-		} catch (IOException ex) {
+		} catch (IOException ignored) {
 		}
 		MCPatcherUtils.log("new CustomAnimation %s, src=%s, buffer size=0x%x, tile=%d",
 			name, (custom == null ? "terrain.png" : customSrc), buffer.length, this.buffer
@@ -51,7 +51,7 @@ public class CustomAnimation extends TextureAtlas {
 
 			int tileX = (sprite % 16) * TileSize.int_size;
 			int tileY = (sprite / 16) * TileSize.int_size;
-			int imageBuf[] = new int[TileSize.int_numPixels];
+			int[] imageBuf = new int[TileSize.int_numPixels];
 			tiles.getRGB(tileX, tileY, TileSize.int_size, TileSize.int_size, imageBuf, 0, TileSize.int_size);
 			ARGBtoRGBA(imageBuf, buffer);
 			if (isScrolling) {
@@ -59,7 +59,7 @@ public class CustomAnimation extends TextureAtlas {
 			}
 		} else {
 			numFrames = custom.getHeight() / custom.getWidth();
-			int imageBuf[] = new int[custom.getWidth() * custom.getHeight()];
+			int[] imageBuf = new int[custom.getWidth() * custom.getHeight()];
 			custom.getRGB(0, 0, custom.getWidth(), custom.getHeight(), imageBuf, 0, TileSize.int_size);
 			this.src = new byte[imageBuf.length * 4];
 			ARGBtoRGBA(imageBuf, this.src);
@@ -70,9 +70,9 @@ public class CustomAnimation extends TextureAtlas {
 		for (int i = 0; i < src.length; ++i) {
 			int v = src[i];
 			dest[(i * 4) + 3] = (byte) ((v >> 24) & 0xFF);
-			dest[(i * 4) + 0] = (byte) ((v >> 16) & 0xFF);
+			dest[(i * 4)] = (byte) ((v >> 16) & 0xFF);
 			dest[(i * 4) + 1] = (byte) ((v >> 8) & 0xFF);
-			dest[(i * 4) + 2] = (byte) ((v >> 0) & 0xFF);
+			dest[(i * 4) + 2] = (byte) ((v) & 0xFF);
 		}
 	}
 

@@ -11,12 +11,12 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 class Config {
-	private File xmlFile = null;
+	private File xmlFile;
 	Document xml;
 
 	/*
@@ -88,21 +88,12 @@ class Config {
 
 		File propFile = new File(minecraftDir, "mcpatcher.properties");
 		if (propFile.exists()) {
-			FileInputStream is = null;
-			try {
-				is = new FileInputStream(propFile);
+			try (FileInputStream is = new FileInputStream(propFile)) {
 				convertPropertiesToXML(is);
 				save = true;
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
-				if (is != null) {
-					try {
-						is.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
 				propFile.delete();
 			}
 		}
@@ -325,25 +316,15 @@ class Config {
 	boolean saveProperties() {
 		boolean saved = false;
 		if (xml != null && xmlFile != null) {
-			FileOutputStream os = null;
-			try {
-				os = new FileOutputStream(xmlFile);
+			try (FileOutputStream os = new FileOutputStream(xmlFile)) {
 				TransformerFactory factory = TransformerFactory.newInstance();
 				Transformer trans = factory.newTransformer();
 				trans.setOutputProperty(OutputKeys.INDENT, "yes");
 				DOMSource source = new DOMSource(xml);
-				trans.transform(source, new StreamResult(new OutputStreamWriter(os, "UTF-8")));
+				trans.transform(source, new StreamResult(new OutputStreamWriter(os, StandardCharsets.UTF_8)));
 				saved = true;
 			} catch (Exception e) {
 				e.printStackTrace();
-			} finally {
-				if (os != null) {
-					try {
-						os.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
 			}
 		}
 		return saved;

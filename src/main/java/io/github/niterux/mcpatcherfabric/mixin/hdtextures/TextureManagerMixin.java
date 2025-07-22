@@ -33,7 +33,7 @@ public abstract class TextureManagerMixin implements ResizeTile {
 	public abstract void reload();
 
 	@Shadow
-	private List sprites;
+	private List<TextureAtlas> sprites;
 
 	@Override
 	public void mcpatcherfabric$setTileSize(Minecraft minecraft) {
@@ -97,7 +97,7 @@ public abstract class TextureManagerMixin implements ResizeTile {
 	}
 
 	@WrapOperation(method = "addSprite(Lnet/minecraft/client/render/texture/TextureAtlas;)V", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z"))
-	private boolean mcpatcherRegisterSprite(List instance, Object sprite, Operation<Boolean> original) {
+	private boolean mcpatcherRegisterSprite(List<TextureAtlas> instance, Object sprite, Operation<Boolean> original) {
 		TextureUtils.registerTextureFX(instance, (TextureAtlas) sprite);
 		return true;
 	}

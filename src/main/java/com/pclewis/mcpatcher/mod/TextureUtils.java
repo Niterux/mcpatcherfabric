@@ -44,11 +44,11 @@ public class TextureUtils {
 	public static final int FIRE_N_S_TEXTURE_INDEX = FIRE_E_W_TEXTURE_INDEX + 16;
 	public static final int PORTAL_TEXTURE_INDEX = 14; // Block.portal.blockIndexInTexture
 
-	private static final HashMap<String, Integer> expectedColumns = new HashMap<String, Integer>();
+	private static final HashMap<String, Integer> expectedColumns = new HashMap<>();
 
 	private static final boolean useTextureCache;
 	private static TexturePack lastTexturePack = null;
-	private static final HashMap<String, BufferedImage> cache = new HashMap<String, BufferedImage>();
+	private static final HashMap<String, BufferedImage> cache = new HashMap<>();
 
 	static {
 		animatedFire = MCPatcherUtils.getBoolean(MCPatcherUtils.MODS.get("hdtextures"), "animatedFire", true);
@@ -74,16 +74,14 @@ public class TextureUtils {
 		expectedColumns.put("/custom_portal.png", 1);
 	}
 
-	public static boolean setTileSize() {
+	public static void setTileSize() {
 		MCPatcherUtils.log("\nchanging skin to %s", getTexturePackName(getSelectedTexturePack()));
 		int size = getTileSize();
 		if (size == TileSize.int_size) {
 			MCPatcherUtils.log("tile size %d unchanged", size);
-			return false;
 		} else {
 			MCPatcherUtils.log("setting tile size to %d (was %d)", size, TileSize.int_size);
 			TileSize.setTileSize(size);
-			return true;
 		}
 	}
 
@@ -151,7 +149,7 @@ public class TextureUtils {
 	public static void refreshTextureFX(java.util.List<TextureAtlas> textureList) {
 		MCPatcherUtils.log("refreshTextureFX()");
 
-		ArrayList<TextureAtlas> savedTextureFX = new ArrayList<TextureAtlas>();
+		ArrayList<TextureAtlas> savedTextureFX = new ArrayList<>();
 		for (TextureAtlas t : textureList) {
 			TextureAtlas fx = refreshTextureFX(t);
 			if (fx != null) {
@@ -196,9 +194,7 @@ public class TextureUtils {
 			textureList.add(new NetherPortalSprite());
 		}
 
-		for (TextureAtlas t : savedTextureFX) {
-			textureList.add(t);
-		}
+		textureList.addAll(savedTextureFX);
 
 		for (TextureAtlas t : textureList) {
 			t.tick();
